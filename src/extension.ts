@@ -84,9 +84,9 @@ class Extension extends DisposableComponent {
 			entry.ended();
 		}));
 
-		vscode.workspace.onDidChangeConfiguration(() => {
+		this.addDisposable(vscode.workspace.onDidChangeConfiguration(() => {
 			this.reload();
-		});
+		}));
 
 		this.reload();
 	}

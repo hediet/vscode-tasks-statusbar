@@ -2,7 +2,19 @@
 	"name": "tasks-statusbar",
 	"displayName": "Tasks Statusbar",
 	"description": "This extension adds buttons to the status bar to quickly start and kill tasks.",
+	"icon": "docs/logo.png",
 	"version": "0.1.0",
+	"publisher": "hediet",
+	"license": "MIT",
+	"author": {
+		"name": "Henning Dieterichs",
+		"email": "henning.dieterichs@live.de"
+	},
+	"readme": "./README.md",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/hediet/vscode-tasks-statusbar.git"
+	},
 	"engines": {
 		"vscode": "^1.32.0"
 	},
