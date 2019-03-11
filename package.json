@@ -1,0 +1,59 @@
+{
+	"name": "tasks-statusbar",
+	"displayName": "Tasks Statusbar",
+	"description": "This extension adds buttons to the status bar to quickly start and kill tasks.",
+	"version": "0.1.0",
+	"engines": {
+		"vscode": "^1.32.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"*",
+		"onCommand:tasksStatusbar.reload"
+	],
+	"main": "./out/extension.js",
+	"contributes": {
+		"commands": [
+			{
+				"command": "tasksStatusbar.reload",
+				"title": "Reload Tasks in Statusbar"
+			}
+		],
+		"configuration": {
+			"title": "Task Status Bar Config",
+			"properties": {
+				"tasksStatusbar.taskLabelFilter": {
+					"type": "string",
+					"format": "regex",
+					"default": "dev|watch",
+					"description": "A regular expression that filters the tasks to show in the status bar by their name"
+				},
+				"tasksStatusbar.nameTemplate": {
+					"type": [ "string", "null" ],
+					"format": "string",
+					"default": null,
+					"description": "A template for the name of the status bar item. Refer with $i to the i-th captured group of the task label filter"
+				}
+			}
+		}
+	},
+	"scripts": {
+		"vscode:prepublish": "yarn run compile",
+		"compile": "tsc -p ./",
+		"watch": "tsc -watch -p ./",
+		"postinstall": "node ./node_modules/vscode/bin/install",
+		"test": "yarn run compile && node ./node_modules/vscode/bin/test"
+	},
+	"devDependencies": {
+		"@types/mocha": "^2.2.42",
+		"@types/node": "^10.12.21",
+		"tslint": "^5.12.1",
+		"typescript": "^3.3.1",
+		"vscode": "^1.1.28"
+	},
+	"dependencies": {
+		"@hediet/std": "^0.1.10"
+	}
+}
