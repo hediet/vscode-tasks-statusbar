@@ -9,8 +9,8 @@ A regular expression can be specified to filter available tasks.
 
 This extension contributes the following settings:
 
-* `tasksStatusbar.taskLabelFilter`: A regular expression that filters the tasks to show in the status bar by their name
-* `tasksStatusbar.nameTemplate`: A template for the name of the status bar item. Refer with `$i` to the i-th captured group of the task label filter
+* `tasksStatusbar.taskLabelFilter`: A regular expression that filters the tasks to show in the status bar by their name. Defaults to `dev|watch`.
+* `tasksStatusbar.nameTemplate`: A template for the name of the status bar item. Refer with `$i` to the i-th captured group of the task label filter.
 
 ## Known Issues
 
