@@ -1,0 +1,53 @@
+name: Publish extension
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    name: Package VSIX
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: yarn
+
+      - name: Install Yarn
+        run: npm install --global yarn@1.22.22
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Package extension
+        id: package
+        shell: bash
+        run: |
+          version="$(node -p "require('./package.json').version")"
+          if [[ "$GITHUB_REF_NAME" != "v$version" ]]; then
+            echo "::error::Tag $GITHUB_REF_NAME does not match package version $version"
+            exit 1
+          fi
+
+          mkdir -p dist
+          vsix="dist/tasks-statusbar-$version.vsix"
+          npx --yes @vscode/vsce@3.9.1 package --no-yarn --out "$vsix"
+          echo "name=$(basename "$vsix")" >> "$GITHUB_OUTPUT"
+          echo "path=$vsix" >> "$GITHUB_OUTPUT"
+
+      - name: Upload VSIX
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.package.outputs.name }}
+          path: ${{ steps.package.outputs.path }}
+          if-no-files-found: error
+          retention-days: 30

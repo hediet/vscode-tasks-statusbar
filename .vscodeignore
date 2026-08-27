@@ -1,5 +1,7 @@
 .vscode/**
 .vscode-test/**
+.github/**
+dist/**
 out/test/**
 src/**
 .gitignore
