@@ -47,31 +47,7 @@ jobs:
           echo "version=$version" >> "$GITHUB_OUTPUT"
           echo "artifact=$artifact" >> "$GITHUB_OUTPUT"
 
-      - name: Check Marketplace version
-        id: marketplace
-        shell: bash
-        run: |
-          npx --yes @vscode/vsce@3.9.1 show \
-            "${{ steps.metadata.outputs.extension_id }}" \
-            --json > marketplace.json
-
-          if grep -qx "undefined" marketplace.json; then
-            exists=false
-          else
-            exists="$(
-              node -e '
-                const fs = require("fs");
-                const metadata = JSON.parse(fs.readFileSync("marketplace.json", "utf8"));
-                const version = process.argv[1];
-                process.stdout.write(String(metadata.versions.some(item => item.version === version)));
-              ' "${{ steps.metadata.outputs.version }}"
-            )"
-          fi
-
-          echo "exists=$exists" >> "$GITHUB_OUTPUT"
-
       - name: Package extension
-        if: steps.marketplace.outputs.exists != 'true'
         id: package
         shell: bash
         run: |
@@ -81,15 +57,9 @@ jobs:
           echo "path=$vsix" >> "$GITHUB_OUTPUT"
 
       - name: Upload VSIX
-        if: steps.marketplace.outputs.exists != 'true'
         uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.metadata.outputs.artifact }}
           path: ${{ steps.package.outputs.path }}
           if-no-files-found: error
           retention-days: 30
-
-      - name: Version already published
-        if: steps.marketplace.outputs.exists == 'true'
-        run: |
-          echo "${{ steps.metadata.outputs.extension_id }}@${{ steps.metadata.outputs.version }} is already published."
